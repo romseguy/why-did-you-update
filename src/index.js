@@ -41,7 +41,9 @@ function createComponentDidUpdate(opts) {
       }
     }
 
-    opts.notifier(opts.groupByComponent, opts.collapseComponentGroups, displayName, diffs)
+    if (diffs.length) {
+      opts.notifier(opts.groupByComponent, opts.collapseComponentGroups, displayName, diffs)
+    }
   }
 }
 
