@@ -1,0 +1,32 @@
+{
+  "name": "why-did-you-update",
+  "version": "1.0.0",
+  "description": "Patch React to discover unnecessary re-renders",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "clean": "rimraf lib"
+  },
+  "dependencies": {
+    "lodash": "^4.13.1"
+  },
+  "peerDependencies": {
+    "react": "^15.0 || 0.14.x"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "react": "0.14.x",
+    "react-dom": "0.14.x",
+    "rimraf": "^2.5.4"
+  },
+  "author": "Gabe Scholz",
+  "license": "MIT",
+  "repository": "https://github.com/romseguy/why-did-you-update",
+  "keywords": [
+    "react-component"
+  ]
+}
