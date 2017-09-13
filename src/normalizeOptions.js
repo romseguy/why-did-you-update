@@ -10,19 +10,23 @@ const toArray = o =>  o ? [].concat(o) : []
 
 export const normalizeOptions = (opts = {}) => {
   let {
-    include = [DEFAULT_INCLUDE],
+    collapseComponentGroups = true,
     exclude = [DEFAULT_EXCLUDE],
     groupByComponent = true,
-    collapseComponentGroups = true,
-    notifier = defaultNotifier,
+    include = [DEFAULT_INCLUDE],
+    includeFunctions = true,
+    mergeDiffs = false,
+    notifier = defaultNotifier
   } = opts
 
 
   return {
-    notifier,
-    include: toArray(include).map(toRegExp),
+    collapseComponentGroups,
     exclude: toArray(exclude).map(toRegExp),
     groupByComponent,
-    collapseComponentGroups,
+    include: toArray(include).map(toRegExp),
+    includeFunctions,
+    mergeDiffs,
+    notifier
   }
 }

@@ -1,13 +1,15 @@
-import {deepDiff} from './deepDiff'
-import {getDisplayName} from './getDisplayName'
-import {normalizeOptions} from './normalizeOptions'
-import {shouldInclude} from './shouldInclude'
+import { deepDiff } from './deepDiff'
+import { getDisplayName } from './getDisplayName'
+import { normalizeOptions } from './normalizeOptions'
+import { shouldInclude } from './shouldInclude'
 
-function diffProps (prev, next, displayName) {
+const map = {}
+
+function diffProps(prev, next, displayName) {
   return deepDiff(prev, next, `${displayName}.props`, [])
 }
 
-function diffState (prev, next , displayName) {
+function diffState(prev, next, displayName) {
   if (prev && next) {
     return deepDiff(prev, next, `${displayName}.state`, [])
   }
@@ -15,17 +17,29 @@ function diffState (prev, next , displayName) {
   return []
 }
 
-function createComponentDidUpdate (opts) {
-  return function componentDidUpdate (prevProps, prevState) {
+function createComponentDidUpdate(opts) {
+  return function componentDidUpdate(prevProps, prevState) {
     const displayName = getDisplayName(this)
 
     if (!shouldInclude(displayName, opts)) {
       return
     }
 
-    const diffs =
+    let diffs =
       diffProps(prevProps, this.props, displayName)
         .concat(diffState(prevState, this.state, displayName))
+
+    if (!opts.includeFunctions) {
+      diffs = diffs.filter(diff => diff.type !== 'function')
+    }
+
+    if (opts.mergeDiffs) {
+      if (!map[displayName]) {
+        map[displayName] = [diffs]
+      } else {
+        map[displayName] = map[displayName].concat(diffs)
+      }
+    }
 
     opts.notifier(opts.groupByComponent, opts.collapseComponentGroups, displayName, diffs)
   }
@@ -36,10 +50,19 @@ export const whyDidYouUpdate = (React, opts = {}) => {
   const _createClass = React.createClass
   opts = normalizeOptions(opts)
 
+  if (window && opts.mergeDiffs) {
+    window.why = displayName => {
+      if (displayName) {
+        return map[displayName]
+      }
+      return map
+    }
+  }
+
   React.Component.prototype.componentDidUpdate = createComponentDidUpdate(opts)
 
   if (_createClass) {
-    React.createClass = function createClass (obj) {
+    React.createClass = function createClass(obj) {
       if (!obj.mixins) {
         obj.mixins = []
       }
