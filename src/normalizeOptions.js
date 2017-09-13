@@ -16,6 +16,7 @@ export const normalizeOptions = (opts = {}) => {
     include = [DEFAULT_INCLUDE],
     includeFunctions = true,
     mergeDiffs = false,
+    onlyFunctions = false,
     notifier = defaultNotifier
   } = opts
 
@@ -27,6 +28,7 @@ export const normalizeOptions = (opts = {}) => {
     include: toArray(include).map(toRegExp),
     includeFunctions,
     mergeDiffs,
-    notifier
+    notifier,
+    onlyFunctions
   }
 }

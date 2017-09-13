@@ -31,6 +31,8 @@ function createComponentDidUpdate(opts) {
 
     if (!opts.includeFunctions) {
       diffs = diffs.filter(diff => diff.type !== 'function')
+    } else if (opts.onlyFunctions) {
+      diffs = diffs.filter(diff => diff.type === 'function')
     }
 
     if (opts.mergeDiffs) {
